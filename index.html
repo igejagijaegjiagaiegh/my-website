@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>Sorrow.wtf | collective</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@100;300&display=swap" rel="stylesheet">
+    <title>we</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Roboto:wght@100;300;400&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -70,7 +70,6 @@
             100% { transform: scale(1.05) translate3d(5px, 8px, 0) rotate(0.1deg); }
         }
 
-        
         @keyframes colorPulse {
             0% { opacity: 0.92; }
             50% { opacity: 1; }
@@ -211,6 +210,8 @@
         }
 
         .member-btn {
+            position: relative;
+            display: inline-block;
             opacity: 0.7;
             transition: all 0.25s ease;
             cursor: pointer;
@@ -240,15 +241,222 @@
             .card { flex-direction: column; }
             .profile-img-container { width: 100%; height: 350px; border-right: none; border-bottom: var(--border); }
         }
+    
+        .sorrow-archives {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 20;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            letter-spacing: 0.18em;
+            font-weight: 400;
+            color: #e0e0e0;
+            opacity: 0.9;
+            text-transform: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .archives-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.72);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .archives-overlay.open {
+            display: flex;
+        }
+
+        .archives-box {
+            width: min(760px, 88vw);
+            max-height: 78vh;
+            overflow-y: auto;
+            background: #080808;
+            border: 1px solid rgba(255,255,255,0.14);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+            padding: 34px;
+            position: relative;
+        }
+
+        .archives-box::before,
+        .archives-box::after {
+            content: '';
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: rgba(255,255,255,0.45);
+            border-style: solid;
+            pointer-events: none;
+        }
+
+        .archives-box::before {
+            top: 12px;
+            left: 12px;
+            border-width: 1px 0 0 1px;
+        }
+
+        .archives-box::after {
+            right: 12px;
+            bottom: 12px;
+            border-width: 0 1px 1px 0;
+        }
+
+        .archives-title {
+            font-family: 'Cinzel', serif;
+            font-size: 22px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            margin-bottom: 28px;
+        }
+
+        .archives-item {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 15px 18px;
+            margin-top: 10px;
+            background: rgba(255,255,255,0.035);
+            border: 1px solid rgba(255,255,255,0.07);
+            color: #e0e0e0;
+            text-align: left;
+            font-family: 'Roboto', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.12em;
+            transition: 0.2s ease;
+            cursor: pointer;
+        }
+
+        .archives-item:hover {
+            background: rgba(255,255,255,0.07);
+            border-color: rgba(255,255,255,0.18);
+        }
+
+        .archives-close {
+            position: absolute;
+            top: 18px;
+            right: 20px;
+            background: none;
+            border: 0;
+            color: #aaa;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .archives-close:hover {
+            color: #fff;
+        }
+
+        #dox-pad-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 100000;
+            display: none;
+            background: #000000;
+            overflow-y: auto;
+            padding: 60px 40px;
+            box-sizing: border-box;
+        }
+
+        #dox-pad-overlay.open {
+            display: block;
+        }
+
+        .dox-pad-content {
+            max-width: 900px;
+            margin: 0 auto;
+            font-family: 'Courier New', Courier, monospace;
+            color: #ffffff;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            position: relative;
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        .dox-pad-close {
+            position: fixed;
+            top: 25px;
+            right: 35px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            font-family: Arial, sans-serif;
+            cursor: pointer;
+            z-index: 100001;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .dox-pad-close:hover {
+            opacity: 1;
+        }
     </style>
+    <script>
+        const titleCycle = ["we", "live", "through", "sorrow"];
+        let titleIndex = 0;
+
+        setInterval(() => {
+            titleIndex = (titleIndex + 1) % titleCycle.length;
+            document.title = titleCycle[titleIndex];
+        }, 1000);
+
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        document.addEventListener('keydown', e => {
+            if (
+                e.key === 'F12' ||
+                (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c')) ||
+                (e.ctrlKey && (e.key === 'U' || e.key === 'u'))
+            ) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        setInterval(() => {
+            const before = performance.now();
+            debugger;
+            const after = performance.now();
+            if (after - before > 100) {
+                document.body.innerHTML = '';
+            }
+        }, 1000);
+    </script>
 </head>
 <body class="flex flex-col items-center">
+    <button class="sorrow-archives" onclick="openArchives()" type="button">Sorrow Archives</button>
 
-    
+    <div id="archives-overlay" class="archives-overlay" onclick="closeArchives(event)">
+        <div class="archives-box" onclick="event.stopPropagation()">
+            <button class="archives-close" onclick="closeArchives()" type="button">×</button>
+            <div class="archives-title">Sorrow Archives</div>
+            <div class="archives-item" onclick="openDoxPad('Archive I')">ValorAE</div>
+            <div class="archives-item" onclick="openDoxPad('Archive II')">Archive II</div>
+            <div class="archives-item" onclick="openDoxPad('Archive III')">Archive III</div>
+            <div class="archives-item" onclick="openDoxPad('Archive IV')">Archive IV</div>
+        </div>
+    </div>
+
+    <div id="dox-pad-overlay">
+        <button class="dox-pad-close" onclick="closeDoxPad()" type="button">×</button>
+        <div id="dox-pad-text" class="dox-pad-content"></div>
+    </div>
+
     <div class="bg-container" id="bg-container">
         <div class="bg-image" id="bg-image"></div>
     </div>
-    <canvas id="particle-canvas" class="bg-particles"></canvas>
     <div class="bg-overlay"></div>
 
     <audio id="bg-music" preload="auto"></audio>
@@ -330,10 +538,6 @@
         </div>
     </main>
 
-    <footer class="fixed bottom-8 right-8 z-10 opacity-80 text-[9px] tracking-[0.5em] uppercase font-light">
-        &copy; Sorrow.wtf // collective
-    </footer>
-
     <script>
         const player = document.getElementById('bg-music');
         const fill = document.getElementById('progress-fill');
@@ -394,6 +598,249 @@
                 ]
             }
         };
+
+        const archiveData = {
+            'Archive I': `@Remy @Bipolar @Worry Sorrow.wtf
+-> Aliases:
+~~~~~~~~~~~~~
+RichBoyDonte, Prodigy, ProdigysComeback, combossdonte, dontemontiel2,                
+richboydonte3, dontemontiel, dontev2006, donteisfine, richboydonte1,                 
+richboydonte2, richboydonte7, donte2342, dontemontiel, donte2342, Bigdeckdonte,      
+[Faze5]Donte XXDSPLAYZXX, dosig-74, dontedbest21 
+
+
+images of him being weird 
+https://qu.ax/G79Vj
+https://qu.ax/NeMcm 
+https://qu.ax/Coqse  
+https://qu.ax/6qOTd 
+https://qu.ax/TolYA   
+https://qu.ax/IXDMR 
+https://qu.ax/GW32S
+-> Personal Information:
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+-> Full Name: Donte David Sigler
+
+ » DOB          : 21/12/2006
+
+-> Age: 20
+
+-> Address: 223 Harrison Ave SW Canton OH 44706 ( confirmed )
+
+-> Medical Records: https://qu.ax/aZGF1
+
+-> Medical Card: https://qu.ax/HokUY 
+
+ Signature : https://qu.ax/qXN3t
+ 
+Email(s): 
+⤷ dontev2006@gmail.com                                                                 
+                  ├ TradingView        Poshmark        Pinterest      Linktree                       
+                  ├ Kahoot             Facebook        Spotify        Wix                            
+                  ├ Instagram          Apple           EA             Nvidia                         
+                  ├ Tubi               OpenAI          Twitter        Samsung                        
+                  ├ PayPal             Snapchat        Microsoft      CashApp                        
+                  └ Fetch              Chess           Goodreads      WarnerBros   
+
+ » SSN          : 273-13-2878
+
+
+
+Case File :
+                                                                             
+  » Case Number  : 2025 TR-D 003848                                                                    
+     ⤷  Party Type        : DEFENDANT                                                       
+     ⤷  Judge             : RICKETT, MICHAEL W.                                             
+     ⤷  Status            : CLOSED                                                          
+     ⤷  Uniform Case #    : 002025TR003848XXXXXX                                            
+     ⤷  Court Type        : TRAFFIC                                                         
+     ⤷  Case Type         : OTHER                                                           
+     ⤷  Court Description :                                                                 
+     ⤷ DRIVING UNDER SUSP/REV (4510.11)                                                
+     ⤷ Disposition  : GUILTY                                                      
+     ⤷ Offense Date : 06/04/2025 (mm/dd/yyyy)                                     
+     ⤷ TURN ON RED (4511.13c)                                                          
+     ⤷ Disposition  : DISMISSED                                                   
+     ⤷ Offense Date : 06/04/2025 (mm/dd/yyyy)                                     
+     ⤷  Agency            : OHIO STATE PATROL                                               
+     ⤷  Agency Report #   : OHP850323060420252229                                          
+     ⤷  Documents         : https://qu.ax/8yzvB                                             
+                                                                                                                                     
+    » Case Number  : 2025 DR-H 000375 	                                                                 
+    ⤷  Party Type        : RESPONDENT                                                      
+    ⤷  Judge             : SPITLER, COREY E                                                
+    ⤷  Status            : CLOSED                                                         
+    ⤷  Court Type        : DOMESTIC RELATIONS                                              
+    ⤷  Case Type         : DOMESTIC VIOLENCE                                               
+                                                                                                                                     
+    » Case Number  : 2025 DR-H 000127 	                                                                 
+    ⤷  Party Type        : RESPONDENT                                                      
+    ⤷  Judge             : SPITLER, COREY E                                                
+    ⤷  Status            : CLOSED                                                          
+    ⤷  Court Type        : DOMESTIC RELATIONS                                              
+    ⤷  Case Type         : DOMESTIC VIOLENCE                                               
+                                                                                                                                     
+    » Case Number  : 2026 CR-B 000398	                                                                 
+    ⤷  Party Type        : DEFENDANT                                                       
+    ⤷  Judge             : RICKETT, MICHAEL W.                                             
+    ⤷  Status            : CLOSED                                                          
+    ⤷  Uniform Case #    : 002026CR000398XXXXXX                                            
+    ⤷  Court Type        : CRIMINAL (MUNI)                                                 
+    ⤷  Case Type         : CRIMINAL MISDEMEANOR (B)                                        
+    ⤷  Court Description :                                                                 
+    ⤷ VIOLATING A PROTECTION ORDER (2919.27(A)(1))                                    
+    ⤷ Disposition  : DISMISSED                                                  
+     ⤷ Offense Date : 12/01/2025                                                  
+     ⤷  Agency            : WOOSTER POLICE DEPARTMENT                                       
+     ⤷  Total Fees Due    : $0                                                              
+     ⤷  Documents         : https://qu.ax/Sm8Oc   
+
+ Recorded Calls With His Ex Where She Speaks Openly About Him                                  
+                                                          https://qu.ax/dbI1s                                                       
+                                                          https://qu.ax/zz9Se                                                       
+                                                          https://qu.ax/dw1ZX  
+
+  » Phone Number : +1(330)209-9883                                                                     
+   ├ Life360            AT&T            PayPal         Facebook                       
+   └ Snapchat           Instagram                                                                                                                                         
+   ├ AT&T               Twitter         Facebook       Apple                         
+   └ Whatsapp           PayPal          Instagram      Snapchat                                                                                                                          
+   ├ Life360            Whatsapp        AT&T           Microsoft                      
+    Twitter            Instagram       PayPal                 
+
+
+                                                                                                                              
+    » MCO  : MediCareSource                                                                         
+             ⤷  Member      : Donte D Sigler                                                        
+             ⤷  Member ID # : 107961254399                                                          
+             ⤷  Plan ID #   : 103571364-00                                                          
+             ⤷  Issued      : 12/28/2025                                                            
+             ⤷  PCP         : Roxanne Taylor, MD                                                    
+            ⤷  PCP Phone # : +1(330)252-1135                                                       
+            (comformation https://qu.ax/HokUY )                                                                                                                         
+                                                                                                           
+                                                                                                             
+                                                                                                                    
+     » Medical      : Children's Hospital Medical Center Of Akron                                         
+                                       ⤷  Patient        : Donte Sigler                                                      
+                                           ⤷  Date           : 6/3/2026                                                           
+                                           ⤷  You Owe        : $0.00                                                              
+                                            ⤷  Provided       :                                                                    
+                                            ⤷  Collection of venous blood by venipuncture                                     
+                                               ⤷  Lipid panel This panel must include the following: Cholesterol, serum,         
+                                                     total (82465) Lipoprotein, direct measurement, high density cholesterol        
+                                                     (HDL cholesterol) (83718) Trigly                                               
+                                                 ⤷  Hemoglobin; glycosylated (A1C)                                                 
+                                                  ⤷  Transferase; alanine amino (ALT) (SGPT)                                        
+                                                 ⤷  Periodic comprehensive preventive medicine reevaluation and management         
+                                                    of an individual including an age and gender appropriate history,              
+                                                     examination, counseling/anticipatory g                                         
+                                            ⤷  Provider       : Children's Hospital Medical Center Of Akron                        
+                                            ⤷  Address        : 1 Perkins Sq Akron, OH 44308                                       
+                                            ⤷  Phone          : +1(330)543-1000                                                    
+                                             ⤷  Billed Amount  : $481.25                                                            
+                                            ⤷  After Discount : $174.17                                                            
+                                             ⤷  Plan Paid      : $174.17                                                            
+                                             ⤷  deductible     : $0.00                                                              
+                                             ⤷  Copay          : $0.00                                                              
+                                             ⤷  Coinsurance    : $0.00                                                              
+                                             ⤷  Responsibility : $0.00                                                              
+                                             ⤷  Claim Number   : 2616103EHM00                                                       
+                                             ⤷  Status         : Processed                                                          
+                                             ⤷  Date Processed : 6/20/2026                                                          
+                                                                                                                                    
+                               » Medical      : Miller, Louise A.                                                                   
+                                             ⤷  Patient        : Donte Sigler                                                       
+                                             ⤷  Date           : 6/3/2026                                                           
+                                             ⤷  You Owe        : $0.00                                                              
+                                             ⤷  Provided       :                                                                    
+                                                  ⤷  Periodic comprehensive preventive medicine reevaluation and management of      
+                                                     an individual including an age and gender appropriate history, examination,    
+                                                     counseling/anticipatory g                                                      
+                                                  ⤷  Office or other outpatient visit for the evaluation and management of an       
+                                                     established patient, which requires a medically appropriate history and/or     
+                                                     examination and low level o                                                    
+                                             ⤷  Provider       : Miller, Louise A.                                                  
+                                             ⤷  Address        : 1 Perkins Sq Akron, OH 44308                                       
+                                             ⤷  Phone          : +1(330)543-1000                                                   
+                                             ⤷  Billed Amount  : $270.00                                                            
+                                             ⤷  After Discount : $81.77                                                             
+                                             ⤷  Plan Paid      : $81.77                                                             
+                                             ⤷  deductible     : $0.00                                                              
+                                             ⤷  Copay          : $0.00                                                             
+                                            ⤷  Coinsurance    : $0.00                                                              
+                                             ⤷  Responsibility : $0.00                                                              
+                                             ⤷  Claim Number   : 2616002GMT00                                                       
+                                             ⤷  Status         : Processed                                                          
+                                             ⤷  Date Processed : 6/20/2026                                                          
+                                                                                                                                    
+                               » Medical      : Aultman Hospital                                                                   
+                                             ⤷  Patient        : Donte Sigler                                                       
+                                             ⤷  Date           : 11/29/2025                                                         
+                                             ⤷  You Owe        : $0.00                                                              
+                                             ⤷  Provided       :                                                                    
+                                                  ⤷  Therapeutic, prophylactic, or diagnostic injection (specify substance or       
+                                                     drug); intravenous push, single or initial substance/drug                      
+                                                 ⤷  Collection of venous blood by venipuncture                                     
+                                                  ⤷  Comprehensive metabolic panel This panel must include the following:           
+                                                     Albumin (82040) Bilirubin, total (82247) Calcium, total (82310)                
+                                                     Carbon dioxide (bicarbonate) (82374) Chlor                                     
+                                                  ⤷  Troponin, quantitative                                                         
+                                                  ⤷  Blood count; complete (CBC), automated (Hgb, Hct, RBC, WBC and platelet        
+                                                     count) and automated differential WBC count                                   
+                                                  ⤷  Fibrin degradation products, D-dimer; quantitative                            
+                                                  ⤷  Infectious agent detection by nucleic acid (DNA or RNA); severe acute          
+                                                    respiratory syndrome coronavirus 2 (SARS-CoV-2) (Coronavirus disease           
+                                                     [COVID-19]), influenza virus types A                                           
+                                                  ⤷  Radiologic examination, chest; single view                                     
+                                                  ⤷  Emergency department visit for the evaluation and management of a patient,     
+                                                     which requires a medically appropriate history and/or examination and          
+                                                     moderate level of medical deci                                                 
+                                                  ⤷  PInjection, ketorolac tromethamine, per 15 mg                                  
+                                               ⤷  Electrocardiogram, routine ECG with at least 12 leads; tracing only, without   
+                                                    interpretation and report                                                      
+                                             ⤷  Provider       : Aultman Hospital                                                   
+                                             ⤷  Address        : 2600 6th St SW Canton, OH 44710                                    
+                                             ⤷  Phone          : +1(216)452-9911                                                    
+                                             ⤷  Billed Amount  : $3958.34                                                           
+                                             ⤷  After Discount : $411.90                                                            
+                                             ⤷  Plan Paid      : $411.90                                                            
+                                            ⤷  deductible     : $0.00                                                              
+                                             ⤷  Copay          : $0.00                                                              
+                                             ⤷  Coinsurance    : $0.00                                                              
+                                             ⤷  Responsibility : $0.00                                                              
+                                             ⤷  Claim Number   : 2534903CZ200                                                       
+                                           ⤷  Status         : Processed                                                          
+                                            ⤷  Date Processed : 12/27/2025                                                         
+                                                                                                                                   
+                               » Pharmacy     : OHIO CVS STORES LLC                                                                 
+                                             ⤷  Patient        : Donte Sigler                                                       
+                                           ⤷  Date           : 6/8/2026                                                           
+                                             ⤷  You Paid       : $0.00                                                              
+                                             ⤷  Cost           : $21.61                                                            
+                                             ⤷  Plan paid      : $0.00                                                             
+                                             ⤷  You Paid       : $0.00                                                             
+                                             ⤷  Claim Number   : 26159P027165501                                                    
+                                             ⤷  Prescription # : 000002180668                                                       
+                                            ⤷  Drug Name      : Dextroamp-amphet Er 30 Mg Cap                                      
+                                                  ⤷  Dose      : 01                                                                 
+                                                 ⤷  Quantity  : 30                                                                 
+                                             ⤷  Date Filed     : 6/8/2026`,
+            'Archive II': ``,
+            'Archive III': ``,
+            'Archive IV': ``
+        };
+
+        function openDoxPad(archiveName) {
+            document.getElementById('dox-pad-overlay').classList.add('open');
+            document.getElementById('dox-pad-text').innerText = archiveData[archiveName] || '';
+        }
+
+        function closeDoxPad() {
+            document.getElementById('dox-pad-overlay').classList.remove('open');
+            document.getElementById('archives-overlay').classList.add('open');
+        }
 
         function preloadImages() {
             Object.values(profiles).forEach(p => {
@@ -569,58 +1016,8 @@
             preloadImages();
             render();
             load();
-            initParticleCanvas();
             initMouseParallax();
         });
-
-        function initParticleCanvas() {
-            const canvas = document.getElementById('particle-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let width = (canvas.width = window.innerWidth);
-            let height = (canvas.height = window.innerHeight);
-
-            window.addEventListener('resize', () => {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            });
-
-            const particles = Array.from({ length: 35 }, () => ({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                radius: Math.random() * 1.5 + 0.5,
-                alpha: Math.random() * 0.4 + 0.1,
-                speedY: -(Math.random() * 0.25 + 0.08),
-                speedX: (Math.random() - 0.5) * 0.2,
-                pulse: Math.random() * Math.PI,
-                pulseSpeed: Math.random() * 0.015 + 0.005
-            }));
-
-            function drawParticles() {
-                ctx.clearRect(0, 0, width, height);
-                for (let i = 0; i < particles.length; i++) {
-                    const p = particles[i];
-                    p.y += p.speedY;
-                    p.x += p.speedX;
-                    p.pulse += p.pulseSpeed;
-
-                    if (p.y < -10) {
-                        p.y = height + 10;
-                        p.x = Math.random() * width;
-                    }
-                    if (p.x < -10) p.x = width + 10;
-                    if (p.x > width + 10) p.x = -10;
-
-                    const currentAlpha = Math.max(0, Math.min(0.6, p.alpha + Math.sin(p.pulse) * 0.15));
-                    ctx.fillStyle = `rgba(220, 220, 230, ${currentAlpha})`;
-                    ctx.beginPath();
-                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-                requestAnimationFrame(drawParticles);
-            }
-            drawParticles();
-        }
 
         function initMouseParallax() {
             const bgContainer = document.getElementById('bg-container');
@@ -643,6 +1040,15 @@
                 requestAnimationFrame(updateParallax);
             }
             updateParallax();
+        }
+    
+        function openArchives() {
+            document.getElementById('archives-overlay').classList.add('open');
+        }
+
+        function closeArchives(event) {
+            if (event && event.target !== event.currentTarget) return;
+            document.getElementById('archives-overlay').classList.remove('open');
         }
     </script>
 </body>
